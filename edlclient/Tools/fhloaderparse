@@ -437,6 +437,7 @@ def main(argv):
             loader_info = loaderinfo()
             loader_info.hw_id = item.hw_id
             loader_info.pk_hash = item.pk_hash
+            loader_info.filesize = str(item.filesize)
             if item.hash not in hashes:
                 if loader_info not in loaderlists:
                     if not is_duplicate(loaderdb, item):
@@ -454,20 +455,20 @@ def main(argv):
                                 if b"peek\x00" in data:
                                     auth += "_peek"
                             fna = os.path.join(outputdir, (
-                                    hwid + "_" + loader_info.pk_hash[0:16] + "_FHPRG" + auth + ".bin").lower())
+                                    hwid + "_" + loader_info.pk_hash[0:16] + "_" + "(" + loader_info.filesize + ")" + "_FHPRG" + auth + ".bin").lower())
                             if not os.path.exists(fna):
                                 copyfile(item.filename,
                                          os.path.join(outputdir, hwid + "_" + (
-                                                 loader_info.pk_hash[0:16] + "_FHPRG" + auth + ".bin").lower()))
+                                                 loader_info.pk_hash[0:16] + "_" + "(" + loader_info.filesize + ")" +  "_FHPRG" + auth + ".bin").lower()))
                             elif item.filesize > os.stat(fna).st_size:
                                 copyfile(item.filename, os.path.join(outputdir,
                                                                      (hwid + "_" + loader_info.pk_hash[
-                                                                                   0:16] + "_FHPRG" + auth + ".bin").lower()))
+                                                                                   0:16] + "_" + "(" + loader_info.filesize + ")" + "_FHPRG" + auth + ".bin").lower()))
                     else:
                         print("Duplicate: " + info)
                         copyfile(item.filename, os.path.join(outputdir, "Duplicate",
                                                              (loader_info.hw_id + "_" + loader_info.pk_hash[
-                                                                                        0:16] + "_FHPRG.bin").lower()))
+                                                                                        0:16] + "_" + "(" + loader_info.filesize + ")" + "_FHPRG.bin").lower()))
                 else:
                     copyfile(item.filename, os.path.join(outputdir, "Unknown", os.path.basename(item.filename).lower()))
             else:
